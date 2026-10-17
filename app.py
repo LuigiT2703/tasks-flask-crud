@@ -17,7 +17,7 @@ def create_task():
   task_id_control += 1
   tasks.append(new_task)
   print(tasks)
-  return jsonify({'message': "Tarefa concluida com sucesso!"})
+  return jsonify({'message': "Tarefa concluida com sucesso!", 'id': new_task.id})
 
 @app.route("/tasks", methods=["GET"])
 def get_tasks():
@@ -70,6 +70,21 @@ def delete_tasks(id):
   
   tasks.remove(task)
   return jsonify({"message": "Tarefa deletada com sucesso!"})
+
+@app.route("/saudacao", methods=['POST'])
+def saudacao():
+  dados = request.get_json()
+  nome = dados["nome"]
+  idade = dados["idade"]
+  if idade < 0:
+    return jsonify({"message": "A idade nao pode ser negativa!"}), 400
+  if nome == "":
+    return jsonify({"message": "O nome nao pode ser vazio!"}), 400
+  if idade >= 18:
+    return jsonify({"message": f"Saudacoes {nome}, voce e maior de idade!"})
+
+  
+  return jsonify({"message": f"Saudacoes {nome}, voce e menor de idade!"})
 
 if __name__ == "__main__":
   app.run(debug=True)
